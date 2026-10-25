@@ -1,0 +1,63 @@
+/* ============================================================
+   LIGHT THEME — Responsive Media Queries & Breakpoints
+   ============================================================ */
+
+@media (max-width: 992px) {
+    .hero-box {
+        padding: 2rem 1.5rem;
+    }
+    .hero-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .brand-badge {
+        font-size: 1.7rem;
+    }
+    .hero-box {
+        padding: 1.5rem 1.2rem;
+    }
+    .hero-title {
+        font-size: 1.7rem;
+    }
+    .hero-desc {
+        font-size: 0.95rem;
+    }
+    div[data-testid="stForm"] {
+        padding: 1.5rem 1.25rem !important;
+        border-radius: 20px !important;
+    }
+    .auth-brand-name {
+        font-size: 1.95rem !important;
+    }
+    .caption-card {
+        padding: 1.1rem;
+    }
+    .caption-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+    .main .block-container {
+        padding-top: 1rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    .app-header-title {
+        font-size: 1.65rem !important;
+    }
+    .app-header-subtitle {
+        font-size: 0.88rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.85rem !important;
+    }
+}
