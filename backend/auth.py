@@ -385,6 +385,25 @@ def reset_password_with_token(
 # Email Delivery
 # ---------------------------------------------------------------------
 
+def sanitize_smtp_password(password: str, host: str = "smtp.gmail.com") -> str:
+    """
+    Cleans and normalizes SMTP credentials without exposing them.
+    - Strips surrounding quotes (' or ") and leading/trailing whitespace.
+    - Removes internal spaces commonly present in Google App Passwords (xxxx xxxx xxxx xxxx).
+    - For Gmail SMTP, detects 16-character Google App Passwords where an accidental
+      trailing non-alphabetical character or digit may have been entered.
+    """
+    if not password:
+        return ""
+    p = password.strip().strip("'\"").strip()
+    cleaned = p.replace(" ", "")
+    if "gmail" in host.lower():
+        match_trailing = re.match(r"^([a-z]{16})[^a-zA-Z]$", cleaned)
+        if match_trailing:
+            return match_trailing.group(1)
+    return cleaned
+
+
 def get_email_config() -> Dict[str, Any]:
     """
     Reads Gmail SMTP settings from environment variables.
@@ -521,34 +540,67 @@ def send_password_reset_email(
     try:
         server = smtplib.SMTP(cfg["host"], cfg["port"], timeout=10)
         server.ehlo()
-        if cfg["use_tls"]:
+    except (smtplib.SMTPConnectError, TimeoutError, OSError) as net_err:
+        return False, f"Could not connect to Gmail SMTP server at {cfg['host']}:{cfg['port']} ({type(net_err).__name__}). Please check internet connectivity."
+    except Exception as conn_err:
+        return False, f"Failed to deliver reset email due to SMTP error: {type(conn_err).__name__}."
+
+    if cfg["use_tls"]:
+        try:
             server.starttls()
             server.ehlo()
-
-        clean_password = cfg["password"].replace(" ", "")
-        try:
-            server.login(cfg["username"], clean_password)
-        except (smtplib.SMTPAuthenticationError, smtplib.SMTPServerDisconnected) as auth_err:
+        except Exception as tls_err:
             try:
                 server.close()
             except Exception:
                 pass
-            return False, (
-                "Gmail SMTP authentication failed (535 5.7.8 BadCredentials). "
-                "Please verify that EMAIL_USER is your full Gmail address and EMAIL_PASS is a valid 16-character Google App Password "
-                "generated from https://myaccount.google.com/apppasswords with 2-Step Verification enabled on your Google account."
-            )
+            return False, f"TLS negotiation failed with {cfg['host']}:{cfg['port']} ({type(tls_err).__name__})."
 
+    clean_password = sanitize_smtp_password(cfg["password"], cfg["host"])
+    try:
+        server.login(cfg["username"], clean_password)
+    except smtplib.SMTPAuthenticationError as auth_err:
+        try:
+            server.close()
+        except Exception:
+            pass
+        code = getattr(auth_err, "smtp_code", 535)
+        err_msg = ""
+        if hasattr(auth_err, "smtp_error") and auth_err.smtp_error:
+            raw_err = auth_err.smtp_error
+            err_msg = raw_err.decode("utf-8", errors="replace") if isinstance(raw_err, bytes) else str(raw_err)
+        return False, (
+            f"Gmail SMTP authentication failed ({code} {err_msg.strip() or '5.7.8 BadCredentials'}). "
+            "Please verify that EMAIL_USER is your full Gmail address and EMAIL_PASS is a valid 16-character Google App Password "
+            "generated from https://myaccount.google.com/apppasswords with 2-Step Verification enabled on your Google account."
+        )
+    except smtplib.SMTPServerDisconnected:
+        try:
+            server.close()
+        except Exception:
+            pass
+        return False, (
+            "Gmail SMTP server disconnected unexpectedly during authentication. "
+            "The server closed the connection, which typically occurs when credentials are not accepted or Google App Passwords are required. "
+            "Please verify that EMAIL_USER is your full Gmail address and EMAIL_PASS is a 16-character Google App Password."
+        )
+
+    try:
         server.sendmail(cfg["from_email"], [email], msg.as_string())
         server.quit()
         return True, "Password reset instructions have been sent and accepted by the Gmail SMTP server for delivery."
-
     except (smtplib.SMTPSenderRefused, smtplib.SMTPRecipientsRefused, smtplib.SMTPDataError) as send_err:
+        try:
+            server.close()
+        except Exception:
+            pass
         return False, f"Gmail SMTP message delivery was rejected ({type(send_err).__name__})."
-    except (smtplib.SMTPConnectError, TimeoutError, OSError) as net_err:
-        return False, f"Could not connect to Gmail SMTP server at {cfg['host']}:{cfg['port']} ({type(net_err).__name__}). Please check internet connectivity."
     except Exception as e:
-        return False, f"Failed to deliver reset email due to SMTP error: {type(e).__name__}."
+        try:
+            server.close()
+        except Exception:
+            pass
+        return False, f"Failed to deliver reset email due to SMTP transmission error: {type(e).__name__}."
 
 
 def verify_smtp_connection(
@@ -581,27 +633,46 @@ def verify_smtp_connection(
         server = smtplib.SMTP(cfg["host"], cfg["port"], timeout=12)
         server.ehlo()
         diag["connection_established"] = True
+    except Exception as conn_err:
+        return False, f"SMTP connection failed ({type(conn_err).__name__}): {str(conn_err)}", diag
 
-        if cfg["use_tls"]:
+    if cfg["use_tls"]:
+        try:
             server.starttls()
             server.ehlo()
             diag["starttls_negotiated"] = True
-
-        clean_password = cfg["password"].replace(" ", "")
-        try:
-            server.login(cfg["username"], clean_password)
-            diag["authenticated"] = True
-        except (smtplib.SMTPAuthenticationError, smtplib.SMTPServerDisconnected):
+        except Exception as tls_err:
             try:
                 server.close()
             except Exception:
                 pass
-            return False, (
-                "Gmail SMTP rejected login credentials (535 BadCredentials). "
-                "Ensure EMAIL_USER is your full Gmail address and EMAIL_PASS is a 16-character Google App Password with 2-Step Verification enabled."
-            ), diag
+            return False, f"STARTTLS negotiation failed ({type(tls_err).__name__}): {str(tls_err)}", diag
 
-        if test_recipient:
+    clean_password = sanitize_smtp_password(cfg["password"], cfg["host"])
+    try:
+        server.login(cfg["username"], clean_password)
+        diag["authenticated"] = True
+    except smtplib.SMTPAuthenticationError as auth_err:
+        try:
+            server.close()
+        except Exception:
+            pass
+        return False, (
+            "Gmail SMTP rejected login credentials (535 BadCredentials). "
+            "Ensure EMAIL_USER is your full Gmail address and EMAIL_PASS is a 16-character Google App Password with 2-Step Verification enabled."
+        ), diag
+    except smtplib.SMTPServerDisconnected:
+        try:
+            server.close()
+        except Exception:
+            pass
+        return False, (
+            "Gmail SMTP server disconnected unexpectedly during authentication. "
+            "Ensure EMAIL_USER is your full Gmail address and EMAIL_PASS is a 16-character Google App Password."
+        ), diag
+
+    if test_recipient:
+        try:
             test_msg = MIMEMultipart()
             test_msg["Subject"] = "CaptionCraft AI — Gmail SMTP Diagnostic Test"
             test_msg["From"] = cfg["from_email"]
@@ -609,12 +680,19 @@ def verify_smtp_connection(
             test_msg.attach(MIMEText("This is an automated diagnostic test email from CaptionCraft AI verifying that Gmail SMTP delivery is functioning correctly.", "plain"))
             server.sendmail(cfg["from_email"], [test_recipient], test_msg.as_string())
             diag["test_email_submitted"] = True
+        except Exception as send_err:
+            try:
+                server.close()
+            except Exception:
+                pass
+            return False, f"SMTP test message transmission failed ({type(send_err).__name__}): {str(send_err)}", diag
 
+    try:
         server.quit()
-        return True, "Gmail SMTP connection and authentication verified successfully.", diag
+    except Exception:
+        pass
+    return True, "Gmail SMTP connection and authentication verified successfully.", diag
 
-    except Exception as e:
-        return False, f"SMTP diagnostic failed ({type(e).__name__}): {str(e)}", diag
 
 
 # ---------------------------------------------------------------------
