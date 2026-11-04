@@ -1,30 +1,36 @@
-# ✨ CaptionCraft AI — Multimodal Social Media Caption Studio
+# ✨ CaptionCraft AI 2.0 — Multimodal Social Media Caption Studio
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
-[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-Multimodal%20API-8E75C2?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-google--genai%20SDK-8E75C2?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Auth%20%26%20History-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Cloudinary](https://img.shields.io/badge/Cloudinary-Asset%20Storage-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)](https://cloudinary.com/)
-[![Tests](https://img.shields.io/badge/Tests-57%20Passed-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)](backend/tests/)
+[![Pandas](https://img.shields.io/badge/Pandas-Export%20Engine-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![Tests](https://img.shields.io/badge/Tests-38%20Passed-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)](backend/tests/)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-**CaptionCraft AI** is a Generative AI social media caption studio designed for content creators, marketers, and digital brands. Powered by **Google Gemini** multimodal models (`google-genai`), the studio transforms text prompts, high-resolution imagery, and emoji sequences into viral, audience-tailored captions across 8 major social platforms.
+**CaptionCraft AI 2.0** is an enterprise-grade AI social media content creation suite designed for content creators, agencies, founders, and social media managers. Powered by **Google Gemini** multimodal models (`google-genai`), the studio transforms text concepts, multi-image sequences, and emoji combinations into viral, platform-tailored copy across 8 major social networks.
 
-Built with an enterprise-grade Python backend, MongoDB persistence, Cloudinary asset storage, Gmail SMTP password-recovery workflows, persistent cookie-backed sessions, and a custom **60–30–10 aesthetic design system**, CaptionCraft AI combines AI capabilities with a polished user experience.
+Built with a modular Python backend, MongoDB persistence, Cloudinary asset storage, Gmail SMTP password-recovery workflows, persistent cookie-backed sessions, and a custom **60–30–10 spatial design system**, CaptionCraft AI pairs generative AI with a refined user experience.
 
 ---
 
 ## 📑 Table of Contents
 
 - [🎨 Design Aesthetics & UI System](#-design-aesthetics--ui-system)
-- [⚡ Key Features](#-key-features)
+- [⚡ Key Features (CaptionCraft AI 2.0)](#-key-features-captioncraft-ai-20)
   - [1. User Authentication & Session Security](#1-user-authentication--session-security)
   - [2. Text-to-Caption Generator](#2-text-to-caption-generator)
   - [3. Image-to-Caption (Multimodal Vision + Cloudinary)](#3-image-to-caption-multimodal-vision--cloudinary)
-  - [4. Emoji-to-Caption Mode](#4-emoji-to-caption-mode)
-  - [5. User-Isolated History & Favorites](#5-user-isolated-history--favorites)
-  - [6. Analytics & Caption Metrics](#6-analytics--caption-metrics)
+  - [4. 🎭 Emoji-to-Caption Mode](#4--emoji-to-caption-mode)
+  - [5. 📱 Live Social Media Post Previews (Creator Tools)](#5--live-social-media-post-previews-creator-tools)
+  - [6. 🔬 AI Viral Caption Analyzer & 1-Click Improver](#6--ai-viral-caption-analyzer--1-click-improver)
+  - [7. 🌍 One-Click Multi-Platform Generator](#7--one-click-multi-platform-generator)
+  - [8. 📸 AI Multi-Image Carousel Storyteller & Photo Dump](#8--ai-multi-image-carousel-storyteller--photo-dump)
+  - [9. User-Isolated History & Favorites](#9-user-isolated-history--favorites)
+  - [10. Data Export & Analytics (Pandas Engine)](#10-data-export--analytics-pandas-engine)
 - [🏗️ Project Architecture](#️-project-architecture)
+- [🔑 Google Gemini API Configuration](#-google-gemini-api-configuration)
 - [🚀 Quick Start Guide](#-quick-start-guide)
   - [1. Prerequisites](#1-prerequisites)
   - [2. Installation](#2-installation)
@@ -50,25 +56,24 @@ CaptionCraft AI features a custom-engineered **60–30–10 color harmony** and 
 - **Application-Owned Header**: Integrated seamlessly inside the main content canvas, featuring the brand badge, dynamic greeting, current page indicator, and quick actions.
 - **Cute & Animated Authentication Experience**: Soft cream authentication cards, floating sparkle icons with `@keyframes` animations, pastel badges, and gentle focus transitions.
 - **Accessibility & Motion Controls**: Full compliance with `@media (prefers-reduced-motion: reduce)` to disable decorative floating and transforms for motion-sensitive users.
-- **Modular External CSS Architecture**: Zero inline CSS spaghetti in Python files. All styles are cleanly separated into `main.css`, `components.css`, `auth.css`, and `responsive.css`.
+- **Modular External CSS Architecture**: Zero inline CSS clutter in Python files. All styles are cleanly separated into `main.css`, `components.css`, `auth.css`, and `responsive.css`.
 
 ---
 
-## ⚡ Key Features
+## ⚡ Key Features (CaptionCraft AI 2.0)
 
 ### 1. User Authentication & Session Security
 - **MongoDB-Backed Registration & Login**: Full schema validation for Full Name, Gender, Age (1–120), normalized Email, and Password (minimum 8 characters).
 - **Bcrypt Hashing with Dynamic Salt**: Passwords are securely hashed and salted; plain-text passwords never touch database collections.
 - **Persistent Browser Sessions**:
-  - Implements cryptographically signed session tokens (`itsdangerous.URLSafeTimedSerializer`).
+  - Cryptographically signed session tokens (`itsdangerous.URLSafeTimedSerializer`).
   - Stored in HTTP cookies (`captioncraft_session`) and verified against the MongoDB `sessions` collection with a 7-day rolling window.
   - **Preserves authenticated state across browser refreshes and page reloads**.
   - Explicit logout safely revokes both the browser cookie and the database session document.
 - **Gmail SMTP Password Recovery**:
-  - Delivers styled multipart HTML/plain-text password reset instructions via Gmail SMTP (`smtp.gmail.com:587` with STARTTLS).
-  - Generates secure single-use 32-character tokens hashed with SHA-256 with a 15-minute expiry.
+  - Multipart HTML/plain-text password reset instructions via Gmail SMTP (`smtp.gmail.com:587` with STARTTLS).
+  - Single-use 32-character tokens hashed with SHA-256 with a 15-minute expiry.
   - **Intelligent Google App Password Sanitization**: Automatically handles spaces, quotes, and stray keystrokes without throwing authentication errors.
-  - **Categorized Diagnostic Feedback**: Accurately distinguishes between connection timeouts, TLS handshake failures, Google App Password bad credentials (`535 5.7.8`), and server disconnections.
   - Anti-enumeration protection prevents leaking user existence.
 
 ### 2. Text-to-Caption Generator
@@ -91,23 +96,72 @@ CaptionCraft AI features a custom-engineered **60–30–10 color harmony** and 
   - **SHA-256 Deduplication Cache**: Calculates image content hashes before uploading to prevent duplicate storage consumption.
   - **Graceful Offline Fallback**: Generates captions using in-memory byte buffers if Cloudinary credentials are not configured.
 
-### 4. Emoji-to-Caption Mode
-- **6 Themed Emoji Categories**: Faces & Moods, Aesthetic Vibes, Hearts & Romance, Nature & Wanderlust, Food & Lifestyle, Wins & Celebration.
-- **One-Click Story Presets**: Instant starter presets including *Tropical Getaway*, *Coffee & Cozy Books*, *Fitness Grinding*, and *Friday Night Out*.
+### 4. 🎭 Emoji-to-Caption Mode
+- **10 Themed Emoji Categories**: Emotions, Lifestyle, Travel, Food, Love, Celebration, Fitness, Nature, Technology, and Creativity.
+- **8 Instant Story Presets**:
+  - ☕ *Coffee & Cozy*
+  - 🌴 *Tropical Vacation*
+  - ❤️ *Love & Relationships*
+  - 🌅 *Sunset Vibes*
+  - 🎉 *Party & Celebration*
+  - 💪 *Fitness Motivation*
+  - 🌸 *Self-Care Day*
+  - 🌧️ *Rainy Day Mood*
 - **Emoji-Only Mode**: Creative storytelling crafted purely through curated emoji arrangements paired with punchy micro-hooks.
+- **Two-Way Synchronized Palette**: Click-to-add emoji chips, custom editable sequence input, instant clear controls, and bidirectional session-state synchronization ensuring the latest sequence is always passed to Gemini without stale caching.
 
-### 5. User-Isolated History & Favorites
+### 5. 📱 Live Social Media Post Previews (Creator Tools)
+- **Authentic Feed Simulations** across 5 platforms:
+  - **Instagram**: Avatar, handle, image frame, action icons, likes counter, bold username, and **simulated "...more" fold cutoff**.
+  - **X / Twitter**: Avatar, display name, verified badge (`✓`), full tweet text, rounded media frame, and **real-time 280-char limit indicator with overflow warning**.
+  - **LinkedIn**: Professional avatar, headline, mobile-scannable paragraphs, **simulated "...see more" fold**, and reaction stats.
+  - **TikTok**: Vertical media card, right action rail (Likes, Comments, Bookmarks, Shares, rotating disc), and bottom caption overlay.
+  - **Threads**: Clean minimalist typography, engagement badges, and discussion counters.
+- Strictly labeled as *Simulation Preview — Content not published to live platforms*.
+
+### 6. 🔬 AI Viral Caption Analyzer & 1-Click Improver
+- **100-Point Scoring Matrix across 5 Categories**:
+  - *Hook Strength* (Max 25 pts)
+  - *Mobile Readability* (Max 20 pts)
+  - *Emotional Appeal* (Max 20 pts)
+  - *CTA Effectiveness* (Max 15 pts)
+  - *Platform Relevance* (Max 20 pts)
+- **Diagnostic Insights**: Strengths, weaknesses, and actionable algorithmic polish tips.
+- **One-Click AI Improver**: Refines captions with 5 directives:
+  - *✨ Make It More Engaging*
+  - *🔥 Create a Stronger Hook*
+  - *✂️ Make It Shorter*
+  - *💬 Improve CTA*
+  - *🎯 Optimize for Selected Platform*
+- **Side-by-Side Comparison**: Review original vs improved version with diff metrics and 1-click adoption.
+
+### 7. 🌍 One-Click Multi-Platform Generator
+- **Simultaneous Cross-Platform Generation**: Enter an idea or image once and craft tailored versions for **Instagram, X / Twitter, LinkedIn, TikTok, and Threads**.
+- **Platform-Native Nuances**:
+  - X / Twitter enforced under 280 characters.
+  - LinkedIn structured with thought-leadership paragraphs.
+  - Instagram optimized for line 1 hook before fold.
+  - TikTok styled with high-velocity tags and hooks.
+  - Threads formatted with conversational dialogue starters.
+- **Batch Operations**: Global *Copy All Platforms*, *Download TXT*, and *Export CSV* via Pandas.
+
+### 8. 📸 AI Multi-Image Carousel Storyteller & Photo Dump
+- **Multi-Image Upload**: Upload 2 to 5 images (JPG, PNG, WebP) with thumbnail ordering and slide role indicators.
+- **Sequential Storyline**:
+  - *Slide 1 (Cover Hook)*: High-CTR scroll-stopping title.
+  - *Slides 2–N-1 (Story Progression)*: Contextual transitions and 3–6 word on-screen text overlay suggestions.
+  - *Final Slide (Closing CTA)*: Engagement prompts (Save, Share, Comment, Follow).
+- **Master Caption & Single-Slide Regeneration**: Post-level master caption ready to paste, single-slide targeted regeneration, and full storyboard export.
+
+### 9. User-Isolated History & Favorites
 - **Multi-Tenant User Isolation**: Every history record is bound to the owner's `user_id`. Queries strictly enforce ownership boundaries, preventing cross-account exposure.
-- **Separate Feature Views**: Dedicated tabs for **Text Captions** and **Image Captions**.
+- **Dedicated Feature Views**: Separate history filters for **Text-to-Caption**, **Image-to-Caption**, **Emoji-to-Caption**, **Multi-Platform**, and **Carousel-Story**.
 - **Management Controls**: One-click clipboard copy, individual record deletion with ownership verification, and bulk history purge.
-- **Robust Export Serialization**:
-  - Exports history to **JSON** and **CSV**.
-  - Features custom serialization handling Python `datetime.datetime`, `datetime.date`, BSON `ObjectId`, and UUID instances to guarantee zero JSON serialization crashes.
 
-### 6. Analytics & Caption Metrics
+### 10. Data Export & Analytics (Pandas Engine)
+- Exports history, favorites, and multi-platform outputs to **JSON** and **CSV** via structured **Pandas DataFrames**.
 - Real-time character counters and word counts tailored to platform character limits.
-- Hashtag frequency and density analysis.
-- Readability metrics and engagement potential estimations.
+- ISO 8601 datetime serialization preventing export crashes.
 
 ---
 
@@ -136,24 +190,52 @@ captioncraft/
 │
 └── backend/                    # Application & Service Layer
     ├── __init__.py             # Package initializer and environment loading
-    ├── ai_service.py           # Google Gemini API client, multimodal requests & JSON parsing
+    ├── ai_service.py           # Google Gemini API client, key healing, model fallbacks & JSON parser
     ├── auth.py                 # Bcrypt hashing, persistent cookies, JWT, Gmail SMTP delivery
     ├── database.py             # MongoDB client, connection pooling & unique indexes
     ├── cloudinary_service.py   # Cloudinary image storage, SHA-256 deduplication cache
-    ├── prompt_templates.py     # Prompt engineering templates for text, images, and emojis
-    ├── utils.py                # Text metrics, fallback file storage, robust JSON/CSV serializers
+    ├── prompt_templates.py     # Multimodal prompt templates for all 5 generation features
+    ├── utils.py                # Text metrics, fallback file storage, Pandas DataFrame exports
     │
     ├── data/                   # Local Fallback Data Storage (when MongoDB is offline)
     │   ├── history.json        # Fallback history storage
     │   └── favorites.json      # Fallback favorites storage
     │
-    └── tests/                  # Automated Test Suite (57 Unit & Integration Tests)
+    └── tests/                  # Automated Test Suite (38 Unit & Integration Tests)
         ├── __init__.py
-        ├── test_auth.py        # Authentication, bcrypt, sessions & input validation (19 tests)
-        ├── test_captioncraft.py# Prompt generation, Gemini handling & text metrics (8 tests)
-        ├── test_cloudinary_gmail.py # Cloudinary caching & Gmail SMTP delivery (15 tests)
-        └── test_history.py     # Multi-user data isolation & datetime export serialization (15 tests)
+        ├── test_auth.py            # Authentication, bcrypt, sessions & input validation
+        ├── test_carousel_story.py  # Carousel storyteller prompts, slides & slide regeneration
+        ├── test_emoji_caption.py   # Emoji-to-caption prompts, state flow & regression tests
+        ├── test_multi_platform.py  # Multi-platform generation, Pandas export & platform limits
+        ├── test_social_preview.py  # Live feed simulation, text metrics & fold calculations
+        ├── test_utils_history.py   # Multi-user data isolation & datetime export serialization
+        └── test_viral_analyzer.py  # 100-point viral scoring, actions & improvement prompt tests
 ```
+
+---
+
+## 🔑 Google Gemini API Configuration
+
+CaptionCraft AI supports the official **`google-genai`** SDK with resilient credential handling:
+
+### 1. Supported Key Formats
+- Standard API Keys (`AIzaSy...`)
+- Modern Google AI Studio Authorization Keys (`AQ...`)
+- **Self-Healing Key Sanitizer**: Automatically strips surrounding whitespace, quotes, and repairs accidental duplicate-character paste typos (e.g., `AAQ.` normalized to `AQ.`).
+
+### 2. Configuration Precedence
+The application resolves your Gemini API key in order:
+1. **Sidebar Manual Override**: Entered in the sidebar "⚙️ Configure API Key" field.
+2. **`GEMINI_API_KEY`**: Set in `.env` or system environment.
+3. **`GOOGLE_API_KEY`**: Secondary fallback environment variable.
+4. **`st.secrets`**: Streamlit secrets configuration (if hosted on Streamlit Cloud).
+
+### 3. Recommended Models & Automatic Fallbacks
+Configured in `backend/ai_service.py` with automatic graceful fallback if a model experiences high demand:
+- **`gemini-3.5-flash`** (Default / Primary) — Ultra-fast, low-latency multimodal reasoning.
+- **`gemini-3.6-flash`** (High Throughput)
+- **`gemini-3.5-flash-lite`** (Ultra-lightweight)
+- **`gemini-flash-lite-latest`**
 
 ---
 
@@ -205,7 +287,6 @@ Open `.env` in your editor and configure your credentials:
 # Google Gemini API Configuration (Required for Caption Generation)
 # =====================================================================
 GEMINI_API_KEY=your_google_gemini_api_key_here
-# Optional: GEMINI_MODEL=gemini-2.5-flash
 
 # =====================================================================
 # MongoDB Configuration (Required for Authentication & History)
@@ -254,10 +335,10 @@ The studio will launch automatically in your default browser at:
 
 ## 🧪 Automated Test Suite
 
-CaptionCraft AI includes an automated test suite comprising **57 tests** executed via Python's standard `unittest` framework:
+CaptionCraft AI includes an automated test suite comprising **38 tests** executed via Python's standard `unittest` framework:
 
 ```powershell
-# Run the entire test suite (57 tests)
+# Run the entire test suite (38 tests)
 python -m unittest discover -s backend/tests -v
 ```
 
@@ -265,17 +346,20 @@ python -m unittest discover -s backend/tests -v
 
 | Suite | Focus Areas | Tests | Command |
 |:---|:---|:---:|:---|
-| **`test_auth.py`** | Registration validation, bcrypt hashing, session cookies, expiration, and database disconnect safety | **19** | `python -m unittest backend/tests/test_auth.py -v` |
-| **`test_captioncraft.py`** | Prompt generation, JSON cleaners, text metrics, and offline utilities | **8** | `python -m unittest backend/tests/test_captioncraft.py -v` |
-| **`test_cloudinary_gmail.py`** | Cloudinary uploads, SHA-256 deduplication, SMTP STARTTLS, password sanitization & diagnostics | **15** | `python -m unittest backend/tests/test_cloudinary_gmail.py -v` |
-| **`test_history.py`** | User-to-user data isolation, cross-account access prevention, and datetime JSON/CSV export serialization | **15** | `python -m unittest backend/tests/test_history.py -v` |
+| **`test_auth.py`** | Registration validation, bcrypt hashing, session cookies, expiration, and database disconnect safety | **4** | `python -m unittest backend/tests/test_auth.py -v` |
+| **`test_emoji_caption.py`** | Emoji prompt building, emoji-only mode, state sync & regression tests against stale sequences | **10** | `python -m unittest backend/tests/test_emoji_caption.py -v` |
+| **`test_multi_platform.py`** | Multi-platform generation, 280-char boundaries, Pandas DataFrame and CSV export serialization | **6** | `python -m unittest backend/tests/test_multi_platform.py -v` |
+| **`test_carousel_story.py`** | Multi-image sequence generation, cover hooks, CTAs, and single-slide regeneration | **4** | `python -m unittest backend/tests/test_carousel_story.py -v` |
+| **`test_viral_analyzer.py`** | 100-pt scoring matrix, algorithmic diagnosis, and 5-action caption improvement prompts | **5** | `python -m unittest backend/tests/test_viral_analyzer.py -v` |
+| **`test_social_preview.py`** | Feed preview metrics, simulated fold thresholds, character overflow indicators | **4** | `python -m unittest backend/tests/test_social_preview.py -v` |
+| **`test_utils_history.py`** | Multi-user data isolation, cross-account access prevention, and datetime export serialization | **5** | `python -m unittest backend/tests/test_utils_history.py -v` |
 
 ---
 
 ## 🛡️ Security & Privacy Engineering
 
 - **Zero Secret Ingestion**: `.env`, session keys, and database credentials are excluded from Git via comprehensive `.gitignore` rules.
-- **Credential Sanitization**: Passwords, auth tokens, and session secrets are never printed in console logs, exception tracebacks, or API error messages.
+- **Credential Sanitization**: Passwords, auth tokens, and session secrets are never printed in console logs, exception tracebacks, or API error messages. Masked previews (e.g. `AQ.Ab...GFrA`) are displayed safely in the UI.
 - **Cryptographic Cookie Protection**: Persistent session tokens are signed using HMAC with SHA-512 serializers to prevent client-side tampering.
 - **Single-Use Expiring Tokens**: Password-reset tokens use cryptographically random 32-character hex strings, hashed with SHA-256 in MongoDB, and automatically invalidated upon single use or after 15 minutes.
 - **Cross-Account Isolation**: Multi-tenant database queries strictly query by verified `user_id`. Unauthenticated or manipulated IDs return empty record sets.

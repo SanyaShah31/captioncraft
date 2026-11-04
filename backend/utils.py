@@ -60,6 +60,9 @@ def generate_caption_id(caption_text: str, timestamp: str = "") -> str:
 
 FEATURE_TEXT_TO_CAPTION = "text_to_caption"
 FEATURE_IMAGE_TO_CAPTION = "image_to_caption"
+FEATURE_EMOJI_TO_CAPTION = "emoji_to_caption"
+FEATURE_MULTI_PLATFORM = "multi_platform"
+FEATURE_CAROUSEL_STORY = "carousel_story"
 
 
 def normalize_feature_type(
@@ -67,12 +70,23 @@ def normalize_feature_type(
     mode: Optional[str] = None
 ) -> Optional[str]:
     """
-    Normalizes feature identifiers to either 'text_to_caption' or 'image_to_caption'.
+    Normalizes feature identifiers to canonical feature keys:
+    - 'text_to_caption'
+    - 'image_to_caption'
+    - 'emoji_to_caption'
+    - 'multi_platform'
+    - 'carousel_story'
     Handles both canonical feature strings and UI mode labels.
     """
     val = (feature_type or mode or "").strip().lower()
     if not val:
         return None
+    if "carousel" in val or "story" in val:
+        return FEATURE_CAROUSEL_STORY
+    if "multi" in val or "all_platform" in val or "all platform" in val:
+        return FEATURE_MULTI_PLATFORM
+    if "emoji" in val:
+        return FEATURE_EMOJI_TO_CAPTION
     if "image" in val:
         return FEATURE_IMAGE_TO_CAPTION
     if "text" in val:
@@ -192,6 +206,27 @@ def get_history(
                     {"mode": "Image-to-Caption"}
                 ]
             })
+        elif resolved_feature == FEATURE_EMOJI_TO_CAPTION:
+            and_conditions.append({
+                "$or": [
+                    {"feature_type": FEATURE_EMOJI_TO_CAPTION},
+                    {"mode": "Emoji-to-Caption"}
+                ]
+            })
+        elif resolved_feature == FEATURE_MULTI_PLATFORM:
+            and_conditions.append({
+                "$or": [
+                    {"feature_type": FEATURE_MULTI_PLATFORM},
+                    {"mode": "Multi-Platform"}
+                ]
+            })
+        elif resolved_feature == FEATURE_CAROUSEL_STORY:
+            and_conditions.append({
+                "$or": [
+                    {"feature_type": FEATURE_CAROUSEL_STORY},
+                    {"mode": "Carousel-Story"}
+                ]
+            })
 
         if search_term and search_term.strip():
             term = search_term.strip()
@@ -289,6 +324,27 @@ def clear_history(
                 "$or": [
                     {"feature_type": FEATURE_IMAGE_TO_CAPTION},
                     {"mode": "Image-to-Caption"}
+                ]
+            })
+        elif resolved_feature == FEATURE_EMOJI_TO_CAPTION:
+            del_conditions.append({
+                "$or": [
+                    {"feature_type": FEATURE_EMOJI_TO_CAPTION},
+                    {"mode": "Emoji-to-Caption"}
+                ]
+            })
+        elif resolved_feature == FEATURE_MULTI_PLATFORM:
+            del_conditions.append({
+                "$or": [
+                    {"feature_type": FEATURE_MULTI_PLATFORM},
+                    {"mode": "Multi-Platform"}
+                ]
+            })
+        elif resolved_feature == FEATURE_CAROUSEL_STORY:
+            del_conditions.append({
+                "$or": [
+                    {"feature_type": FEATURE_CAROUSEL_STORY},
+                    {"mode": "Carousel-Story"}
                 ]
             })
 
@@ -586,3 +642,34 @@ def export_favorites_to_df() -> pd.DataFrame:
             "CTA": str(f.get("cta", "") or "")
         })
     return pd.DataFrame(rows)
+
+def export_multi_platform_to_df(mp_data: Optional[Dict[str, Any]] = None) -> pd.DataFrame:
+    """Flattens multi-platform caption dictionary into a pandas DataFrame for CSV export."""
+    columns = ["Platform", "Caption", "Hook", "Hashtags", "Character_Count", "Platform_Tip"]
+    if not mp_data or not isinstance(mp_data, dict):
+        return pd.DataFrame(columns=columns)
+
+    rows = []
+    for p_name, p_info in mp_data.items():
+        if not isinstance(p_info, dict):
+            continue
+        p_caption = str(p_info.get("caption", "")).strip()
+        p_hook = str(p_info.get("hook", "")).strip()
+        p_hashtags = p_info.get("hashtags", [])
+        if isinstance(p_hashtags, list):
+            tag_str = " ".join(["#" + str(h).lstrip("#") for h in p_hashtags if str(h).strip()])
+        else:
+            tag_str = str(p_hashtags)
+        p_char_count = p_info.get("char_count", len(p_caption))
+        p_tip = str(p_info.get("platform_tip", "")).strip()
+
+        rows.append({
+            "Platform": str(p_name),
+            "Caption": p_caption,
+            "Hook": p_hook,
+            "Hashtags": tag_str,
+            "Character_Count": p_char_count,
+            "Platform_Tip": p_tip
+        })
+
+    return pd.DataFrame(rows) if rows else pd.DataFrame(columns=columns)

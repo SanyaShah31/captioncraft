@@ -490,3 +490,402 @@ button[kind="secondary"]:hover,
     border-radius: 12px !important;
     border: 1px solid rgba(31, 59, 46, 0.15) !important;
 }
+
+/* ============================================================
+   FEATURE 1: EMOJI-TO-CAPTION GENERATOR STYLES
+   ============================================================ */
+
+.emoji-picker-shelf {
+    background: #FAF6EF;
+    border: 1px solid rgba(31, 59, 46, 0.14);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.emoji-group-header {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1F3B2E;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0.5rem 0 0.35rem 0;
+}
+
+.emoji-display-box {
+    background: #FFFFFF;
+    border: 2px dashed #CBB3EB;
+    border-radius: 14px;
+    padding: 0.85rem 1.2rem;
+    min-height: 52px;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    color: #1F3B2E;
+}
+
+.preset-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(31, 59, 46, 0.12);
+    border-radius: 12px;
+    padding: 0.65rem 0.85rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.preset-card:hover {
+    border-color: #CBB3EB;
+    background: #FAF6EF;
+}
+
+/* ============================================================
+   FEATURE 2: LIVE SOCIAL MEDIA POST PREVIEWS
+   ============================================================ */
+
+.mockup-wrapper {
+    background: #FFFFFF;
+    border: 1px solid rgba(31, 59, 46, 0.15);
+    border-radius: 20px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem auto 1.5rem auto;
+    box-shadow: 0 8px 30px rgba(31, 59, 46, 0.08);
+    position: relative;
+    max-width: 620px;
+}
+
+.mockup-disclaimer {
+    font-size: 0.75rem;
+    color: #7A8F84;
+    text-align: center;
+    margin-top: 0.85rem;
+    font-style: italic;
+}
+
+.mockup-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid rgba(31, 59, 46, 0.08);
+}
+
+.mockup-user-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mockup-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1F3B2E, #2A4F3E);
+    color: #E8DCC6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mockup-username {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1F3B2E;
+    line-height: 1.2;
+}
+
+.mockup-handle {
+    font-size: 0.8rem;
+    color: #5C7568;
+}
+
+.mockup-image-frame {
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0.75rem 0;
+    background: #FAF6EF;
+    border: 1px solid rgba(31, 59, 46, 0.08);
+    text-align: center;
+}
+
+.mockup-image-placeholder {
+    height: 240px;
+    background: linear-gradient(135deg, #FAF6EF 0%, #E8DCC6 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #5C7568;
+    font-size: 0.9rem;
+    gap: 8px;
+}
+
+.mockup-body-text {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #1F3B2E;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0.75rem 0;
+}
+
+.mockup-more-fold {
+    color: #5C7568;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.mockup-actions-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.65rem;
+    border-top: 1px solid rgba(31, 59, 46, 0.08);
+    color: #1F3B2E;
+    font-size: 1.15rem;
+}
+
+.mockup-badge-ig {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: #FFFFFF !important;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.mockup-badge-x {
+    background: #000000;
+    color: #FFFFFF !important;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.mockup-badge-li {
+    background: #0077B5;
+    color: #FFFFFF !important;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.mockup-badge-tt {
+    background: #010101;
+    color: #00f2fe !important;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid #fe0979;
+}
+
+.mockup-badge-th {
+    background: #101010;
+    color: #FFFFFF !important;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ============================================================
+   FEATURE 3: VIRAL CAPTION ANALYZER STYLES
+   ============================================================ */
+
+.viral-gauge-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(31, 59, 46, 0.14);
+    border-radius: 18px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 18px rgba(31, 59, 46, 0.05);
+    margin-bottom: 1.25rem;
+}
+
+.viral-score-number {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin: 0.5rem 0 0.25rem 0;
+}
+
+.viral-score-excellent {
+    color: #1F3B2E;
+}
+
+.viral-score-good {
+    color: #8C65BD;
+}
+
+.viral-score-fair {
+    color: #D97706;
+}
+
+.viral-score-verdict {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #3D5A4C;
+    margin-top: 0.35rem;
+}
+
+.viral-category-bar-box {
+    background: #FAF6EF;
+    border: 1px solid rgba(31, 59, 46, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.65rem;
+}
+
+.viral-category-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #1F3B2E;
+    margin-bottom: 0.35rem;
+}
+
+.viral-progress-bg {
+    background: rgba(31, 59, 46, 0.1);
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.viral-progress-fill {
+    background: linear-gradient(90deg, #CBB3EB, #1F3B2E);
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.5s ease-in-out;
+}
+
+.viral-reason-text {
+    font-size: 0.8rem;
+    color: #5C7568;
+    margin-top: 0.35rem;
+}
+
+.eval-bullet-green {
+    background: rgba(31, 59, 46, 0.06);
+    border-left: 3px solid #1F3B2E;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+    color: #1F3B2E;
+}
+
+.eval-bullet-amber {
+    background: rgba(217, 119, 6, 0.08);
+    border-left: 3px solid #D97706;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+    color: #92400E;
+}
+
+.eval-bullet-purple {
+    background: rgba(203, 179, 235, 0.2);
+    border-left: 3px solid #8C65BD;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+    color: #1F3B2E;
+}
+
+.diff-box {
+    background: #FFFFFF;
+    border: 1px solid rgba(31, 59, 46, 0.12);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* ============================================================
+   FEATURE 4: MULTI-PLATFORM GENERATOR STYLES
+   ============================================================ */
+
+.multi-platform-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(31, 59, 46, 0.12);
+    border-radius: 18px;
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 16px rgba(31, 59, 46, 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.multi-platform-card:hover {
+    border-color: #CBB3EB;
+    box-shadow: 0 8px 24px rgba(203, 179, 235, 0.25);
+}
+
+.multi-platform-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.65rem;
+}
+
+.platform-tip-banner {
+    background: #FAF6EF;
+    border-left: 3px solid #CBB3EB;
+    border-radius: 0 8px 8px 0;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.82rem;
+    color: #3D5A4C;
+    margin-top: 0.6rem;
+}
+
+/* ============================================================
+   FEATURE 5: CAROUSEL STORYTELLER STYLES
+   ============================================================ */
+
+.carousel-slide-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(31, 59, 46, 0.14);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 16px rgba(31, 59, 46, 0.04);
+}
+
+.carousel-slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.carousel-overlay-badge {
+    background: #1F3B2E;
+    color: #CBB3EB;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 0.4rem;
+}
+
+.carousel-nav-indicator {
+    text-align: center;
+    font-weight: 700;
+    color: #1F3B2E;
+    font-size: 1.05rem;
+    margin: 0.5rem 0;
+}
